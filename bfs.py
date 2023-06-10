@@ -6,17 +6,33 @@ import collections
 def calculate_distance(start, goal, links):
     queue = Queue()
     visited = {}
-    visited[start] = 0
+    visited[start] = True
+    path = {}   # 経路を記憶/各ノードの親ノードを記憶しておく
     queue.enqueue(start)
     while not queue.empty():
         node = queue.dequeue()
         if node == goal:
-            return visited[node]
+            ans = calculate_path(path, start, goal)
+            return ans
         for child in links[node]:
             if not child in visited:
-                visited[child] = visited[node] + 1
+                visited[child] = True
+                path[child] = node
                 queue.enqueue(child)
-    return -1
+    return "Not Found"
+
+def calculate_path(path, start, goal):
+    ans = []
+    child_node = goal
+    while child_node != start:
+        ans.append(child_node)
+        child_node = path[child_node]
+    ans.append(start)
+    ans_reverse = []
+    for i in range(len(ans)):
+        n = len(ans)
+        ans_reverse.append(ans[(n-1)-i]) 
+    return ans_reverse   
         
 
 class Queue:
@@ -36,3 +52,7 @@ class Queue:
             return False
         else:
             return True
+        
+
+    
+    
